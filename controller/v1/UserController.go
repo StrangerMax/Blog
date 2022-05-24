@@ -6,10 +6,10 @@ import (
 	"GinBlog/common/validator"
 	"GinBlog/model"
 	"github.com/gin-gonic/gin"
-	"github.com/jinzhu/gorm"
 	"golang.org/x/crypto/bcrypt"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 var code int
@@ -58,7 +58,7 @@ func Register(c *gin.Context) {
 	log.Println(username, telephone, password, role)
 
 	//判断手机号是否存在
-	if isTelephoneExist(DB, telephone) {
+	if model.IsTelephoneExist(DB, telephone) {
 		code = errmsg.ERROR_TELEPHONE_USED
 		c.JSON(http.StatusUnprocessableEntity, gin.H{
 			"status": code,
@@ -106,6 +106,7 @@ func Register(c *gin.Context) {
 }
 
 //登录
+// Login 后台登录
 func Login(c *gin.Context) {
 	DB := model.GetDB()
 	//使用结构体获取请求的参数
@@ -178,8 +179,6 @@ func Login(c *gin.Context) {
 	})
 }
 
-//后台登录
-
 // LoginFront 前台登录
 func LoginFront(c *gin.Context) {
 	var formData model.User
@@ -196,15 +195,89 @@ func LoginFront(c *gin.Context) {
 	})
 }
 
+// 查询用户列表
+func GetUsers(c *gin.Context) {
+	pageSize, _ := strconv.Atoi(c.Query("pagesize"))
+	pageNum, _ := strconv.Atoi(c.Query("pagenum"))
 
-
-
-//查询用户是否存在 UserExist
-func isTelephoneExist(db *gorm.DB, telephone string) bool {
-	var user model.User
-	db.Where("telephone = ?", telephone).First(&user)
-	if user.ID != 0 {
-		return true
+	if pageSize == 0 {
+		pageSize = -1 //limit查询-1 直接忽略该过滤
 	}
-	return false
+	if pageNum == 0 {
+		pageNum = -1
+	}
+	data, total := model.GetUsers(pageSize, pageNum)
+	code = errmsg.SUCCSE
+	c.JSON(http.StatusOK, gin.H{
+		"status": code,
+		"data":   data,
+		"total":  total,
+		"msg":    errmsg.GetErrMsg(code),
+	})
+}
+
+// GetUserInfo 查询单个用户
+func GetUserInfo(c *gin.Context) {
+	id, _ := strconv.Atoi(c.Param("id"))
+	var maps = make(map[string]interface{})
+	data, code := model.GetUser(id)
+	maps["username"] = data.Username
+	maps["role"] = data.Role
+	c.JSON(
+		http.StatusOK, gin.H{
+			"status":  code,
+			"data":    maps,
+			"total":   1,
+			"message": errmsg.GetErrMsg(code),
+		},
+	)
+
+}
+
+// EditUser 编辑用户
+func EditUser(c *gin.Context) {
+	var data model.User
+	id, _ := strconv.Atoi(c.Param("id"))
+	_ = c.ShouldBindJSON(&data)
+	code := model.CheckUpUser(id, data.Username)
+	if code == errmsg.SUCCSE {
+		model.EditUser(id, &data)
+	}
+
+	c.JSON(
+		http.StatusOK, gin.H{
+			"status":  code,
+			"message": errmsg.GetErrMsg(code),
+		},
+	)
+}
+
+// ChangeUserPassword 修改密码
+func ChangeUserPassword(c *gin.Context) {
+	var data model.User
+	id, _ := strconv.Atoi(c.Param("id"))
+	_ = c.ShouldBindJSON(&data)
+
+	code := model.ChangePassword(id, &data)
+
+	c.JSON(
+		http.StatusOK, gin.H{
+			"status":  code,
+			"message": errmsg.GetErrMsg(code),
+		},
+	)
+}
+
+// DeleteUser 删除用户
+func DeleteUser(c *gin.Context) {
+	id, _ := strconv.Atoi(c.Param("id"))
+
+	code := model.DeleteUser(id)
+
+	c.JSON(
+		http.StatusOK, gin.H{
+			"status":  code,
+			"message": errmsg.GetErrMsg(code),
+		},
+	)
 }

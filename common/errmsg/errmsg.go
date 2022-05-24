@@ -15,6 +15,7 @@ const (
 	ERROR_USER_NO_RIGHT    = 1008
 	ERROR_TELEPHONE_USED   = 1009
 	ERROR_TELEPHONE_WRONG  = 1010
+	ERROR_USERNAME_WRONG   = 1011
 
 	// code= 2000... 文章模块的错误
 	ERROR_ART_NOT_EXIST = 2001
@@ -24,7 +25,7 @@ const (
 	ERROR_CATE_NOT_EXIST = 3002
 
 	//code= 4000... 系统错误
-	ERROR_SYSTEM_WRONG = 4001
+	ERROR_SYSTEM_WRONG  = 4001
 	ERROR_PWDHASE_WRONG = 4002
 )
 
@@ -32,7 +33,7 @@ var codeMsg = map[int]string{
 	SUCCSE:                 "OK",
 	ERROR:                  "FAIL",
 	ERROR_USERNAME_USED:    "用户名已存在",
-	ERROR_TELEPHONE_USED:	"手机号已注册",
+	ERROR_TELEPHONE_USED:   "手机号已注册",
 	ERROR_TELEPHONE_WRONG:  "手机号码错误",
 	ERROR_PASSWORD_WRONG:   "密码错误",
 	ERROR_USER_NOT_EXIST:   "用户不存在",
@@ -41,13 +42,14 @@ var codeMsg = map[int]string{
 	ERROR_TOKEN_WRONG:      "TOKEN不正确,请重新登陆",
 	ERROR_TOKEN_TYPE_WRONG: "TOKEN格式错误,请重新登陆",
 	ERROR_USER_NO_RIGHT:    "该用户无权限",
+	ERROR_USERNAME_WRONG:   "用户名格式错误",
 
 	ERROR_ART_NOT_EXIST: "文章不存在",
 
 	ERROR_CATENAME_USED:  "该分类已存在",
 	ERROR_CATE_NOT_EXIST: "该分类不存在",
 
-	ERROR_SYSTEM_WRONG: "系统异常错误",
+	ERROR_SYSTEM_WRONG:  "系统异常错误",
 	ERROR_PWDHASE_WRONG: "密码加密错误",
 }
 
