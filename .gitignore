@@ -1,2 +1,11 @@
 # 忽略部分文件
-log/
+/log/
+latest_log.log
+*.yaml
+*.out
+
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib

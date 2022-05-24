@@ -17,7 +17,7 @@ var code int
 //添加/注册用户
 func Register(c *gin.Context) {
 	//todo 添加用户
-	DB := commom.GetDB()
+	DB := model.GetDB()
 	var requestUser = model.User{}
 	c.ShouldBindJSON(&requestUser)
 

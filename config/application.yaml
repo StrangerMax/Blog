@@ -14,10 +14,10 @@ qiniu:
   SecretKey: 6fbx_8iWsI59kER9c4I__5rtIzXXVq6l_1-3-n7i
   Bucket: cmxbinblog
   QiniuSever: http://rc852l9el.hd-bkt.clouddn.com/
-App:
-  DefaultPageSize: 10
-  MaxPageSize: 100
-  LogSavePath: storage/logs
-  LogFileName: app
-  LogFileExt: .log
+#App:
+#  DefaultPageSize: 10
+#  MaxPageSize: 100
+#  LogSavePath: storage/logs
+#  LogFileName: app
+#  LogFileExt: .log
 

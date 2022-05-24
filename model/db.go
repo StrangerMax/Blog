@@ -1,20 +1,25 @@
-package commom
+package model
 
 import (
-	"GinBlog/model"
 	"fmt"
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
 	"github.com/spf13/viper"
 	"log"
 	"net/url"
+	"os"
 	"time"
 )
 
 //数据库 链接
-var db *gorm.DB
-var err error
+var (
+	db  *gorm.DB
+	err error
+)
 
 func InitDb() {
+	InitConfig()
+
 	driverName := viper.GetString("datasource.driverName")
 	host := viper.GetString("datasource.host")
 	port := viper.GetString("datasource.port")
@@ -40,7 +45,7 @@ func InitDb() {
 	//gin默认表明的复数形式
 	db.SingularTable(true)
 
-	db.AutoMigrate(&model.User{})
+	db.AutoMigrate(&User{}, &Comment{}, &Article{}, &Category{}, &Profile{})
 
 	// SetMaxIdleCons 设置连接池中的最大闲置连接数。
 	db.DB().SetMaxIdleConns(10)
@@ -52,7 +57,17 @@ func InitDb() {
 	db.DB().SetConnMaxLifetime(10 * time.Second)
 }
 
-
 func GetDB() *gorm.DB {
 	return db
+}
+
+func InitConfig() {
+	wordDir, _ := os.Getwd()
+	viper.SetConfigName("application")
+	viper.SetConfigType("yml")
+	viper.AddConfigPath(wordDir + "/config")
+	err = viper.ReadInConfig()
+	if err != nil {
+		panic(err)
+	}
 }
