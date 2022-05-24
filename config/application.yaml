@@ -1,0 +1,23 @@
+server:
+  port: 3000
+datasource:
+  driverName: mysql
+  host: 127.0.0.1
+  port: 3306
+  database: GinBlog
+  username: root
+  password: 123456
+  charset: utf8
+  loc: Asia/Shanghai
+qiniu:
+  AccessKey: x1rKyOCtz7CtUT5bkhz-iAu9an2wE6kOWf7axmnc
+  SecretKey: 6fbx_8iWsI59kER9c4I__5rtIzXXVq6l_1-3-n7i
+  Bucket: cmxbinblog
+  QiniuSever: http://rc852l9el.hd-bkt.clouddn.com/
+App:
+  DefaultPageSize: 10
+  MaxPageSize: 100
+  LogSavePath: storage/logs
+  LogFileName: app
+  LogFileExt: .log
+
