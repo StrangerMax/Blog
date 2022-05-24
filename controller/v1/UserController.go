@@ -14,7 +14,7 @@ import (
 
 var code int
 
-//添加/注册用户
+//注册用户
 func Register(c *gin.Context) {
 	//todo 添加用户
 	DB := model.GetDB()
@@ -102,6 +102,97 @@ func Register(c *gin.Context) {
 		"status": code,
 		"token":  token,
 		"msg":    errmsg.GetErrMsg(code),
+	})
+}
+
+//登录
+func Login(c *gin.Context) {
+	DB := model.GetDB()
+	//使用结构体获取请求的参数
+	var requestUser = model.User{}
+	var token string
+	c.Bind(&requestUser)
+
+	//获取参数
+	username := requestUser.Username
+	password := requestUser.Password
+
+	//数据验证
+	if len(password) < 6 {
+		code = errmsg.ERROR_PASSWORD_WRONG
+		log.Println("密码不能少于6位")
+		c.JSON(http.StatusUnprocessableEntity, gin.H{
+			"status": code,
+			"msg":    errmsg.GetErrMsg(code),
+		})
+		return
+	}
+	//判断用户是否存在
+	var user model.User
+	DB.Where("username = ?", username).First(&user)
+	if user.ID == 0 {
+		code = errmsg.ERROR_USER_NOT_EXIST
+		log.Println("用户不存在")
+		c.JSON(http.StatusUnprocessableEntity, gin.H{
+			"status": code,
+			"msg":    errmsg.GetErrMsg(code),
+		})
+		return
+	}
+
+	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)); err != nil {
+		code = errmsg.ERROR_PASSWORD_WRONG
+		log.Println("密码错误")
+		c.JSON(http.StatusUnprocessableEntity, gin.H{
+			"status": code,
+			"msg":    errmsg.GetErrMsg(code),
+		})
+		return
+	}
+
+	if user.Role !=1{
+		code = errmsg.ERROR_USER_NO_RIGHT
+		log.Println("密码错误")
+		c.JSON(http.StatusUnprocessableEntity, gin.H{
+			"status": code,
+			"msg":    errmsg.GetErrMsg(code),
+		})
+		return
+	}
+
+	//发放token给前端
+	token, code = commom.ReleaseToken(user)
+	if code != errmsg.SUCCSE {
+		code = errmsg.ERROR_SYSTEM_WRONG
+		c.JSON(http.StatusUnprocessableEntity, gin.H{
+			"status": code,
+			"msg": errmsg.GetErrMsg(code),
+		})
+		return
+	}
+	//返回结果
+	c.JSON(http.StatusOK, gin.H{
+		"token": token,
+		"status": errmsg.SUCCSE,
+		"msg":   "登录成功",
+	})
+}
+
+//后台登录
+
+// LoginFront 前台登录
+func LoginFront(c *gin.Context) {
+	var formData model.User
+	_ = c.ShouldBindJSON(&formData)
+	var code int
+
+	formData, code = model.CheckLoginFront(formData.Username, formData.Password)
+
+	c.JSON(http.StatusOK, gin.H{
+		"status":  code,
+		"data":    formData.Username,
+		"id":      formData.ID,
+		"message": errmsg.GetErrMsg(code),
 	})
 }
 

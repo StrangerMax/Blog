@@ -38,7 +38,7 @@ func Router()  {
 		后台管理路由接口
 	*/
 	auth := r.Group("api/v1")
-	auth.Use(middleware.AuthMiddleware())
+	//auth.Use(middleware.AuthMiddleware())
 	{
 		// 用户模块的路由接口
 		//auth.GET("admin/users", v1.GetUsers)
@@ -48,7 +48,7 @@ func Router()  {
 		//auth.PUT("admin/changepw/:id", v1.ChangeUserPassword)
 		//// 分类模块的路由接口
 		//auth.GET("admin/category", v1.GetCate)
-		//auth.POST("category/add", v1.AddCategory)
+		auth.POST("category/add", v1.AddCate)
 		//auth.PUT("category/:id", v1.EditCate)
 		//auth.DELETE("category/:id", v1.DeleteCate)
 		//// 文章模块的路由接口
@@ -80,7 +80,7 @@ func Router()  {
 		//router.GET("users", v1.GetUsers)
 		//
 		//// 文章分类信息模块
-		//router.GET("category", v1.GetCate)
+		router.GET("category", v1.GetCate)
 		//router.GET("category/:id", v1.GetCateInfo)
 		//
 		//// 文章模块
@@ -89,8 +89,8 @@ func Router()  {
 		//router.GET("article/info/:id", v1.GetArtInfo)
 		//
 		//// 登录控制模块
-		//router.POST("login", v1.Login)
-		//router.POST("loginfront", v1.LoginFront)
+		router.POST("login", v1.Login)
+		router.POST("loginfront", v1.LoginFront)
 		//
 		//// 获取个人设置信息
 		//router.GET("profile/:id", v1.GetProfile)

@@ -1,6 +1,6 @@
 # 忽略部分文件
 /log/
-latest_log.log
+*.log
 *.yaml
 *.out
 
