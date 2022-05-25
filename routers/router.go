@@ -42,15 +42,15 @@ func Router()  {
 	{
 		// 用户模块的路由接口
 		auth.GET("admin/users", v1.GetUsers)
-		auth.PUT("user/:id", v1.EditUser)
-		auth.DELETE("user/:id", v1.DeleteUser)
+		auth.PUT("user/:id", v1.EditUser)   		 //TODO bug存在 密码 手机号等修改  必须提供name role字段
+		auth.DELETE("user/:id", v1.DeleteUser)    // 软删除
 		////修改密码
-		auth.PUT("admin/changepw/:id", v1.ChangeUserPassword)
+		auth.PUT("admin/changepw/:id", v1.ChangeUserPassword)   //TODO 存在bug  该方法需要对传入的数据进行加密解密
 		//// 分类模块的路由接口
-		//auth.GET("admin/category", v1.GetCate)
+		auth.GET("admin/category", v1.GetCate)
 		auth.POST("category/add", v1.AddCate)
-		//auth.PUT("category/:id", v1.EditCate)
-		//auth.DELETE("category/:id", v1.DeleteCate)
+		auth.PUT("category/:id", v1.EditCate)
+		auth.DELETE("category/:id", v1.DeleteCate)
 		//// 文章模块的路由接口
 		//auth.GET("admin/article/info/:id", v1.GetArtInfo)
 		//auth.GET("admin/article", v1.GetArt)
@@ -75,13 +75,13 @@ func Router()  {
 	router := r.Group("api/v1")
 	{
 		// 用户信息模块
-		router.POST("user/add", v1.Register)
-		router.GET("user/:id", v1.GetUserInfo)
-		router.GET("users", v1.GetUsers)
+		router.POST("user/add", v1.Register)     //TODO 账户创建对于软删除的手机号存在bug
+		router.GET("user/:id", v1.GetUserInfo)   //TODO 账户信息查询只提供name role 差手机号
+		router.GET("users", v1.GetUsers) 		//查询单个用户信息
 		//
 		//// 文章分类信息模块
 		router.GET("category", v1.GetCate)
-		//router.GET("category/:id", v1.GetCateInfo)
+		router.GET("category/:id", v1.GetCateInfo)
 		//
 		//// 文章模块
 		//router.GET("article", v1.GetArt)

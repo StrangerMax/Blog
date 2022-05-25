@@ -8,7 +8,7 @@ import (
 
 type User struct {
 	gorm.Model
-	Username  string `gorm:"type:varchar(20);not null " json:"username" validate:"required,min=4,max=12" label:"用户名"`
+	Username  string `gorm:"type:varchar(20);not null " json:"username" validate:"required,min=3,max=12" label:"用户名"`
 	Password  string `gorm:"size:255;not null" json:"password" validate:"required,min=6,max=120" label:"密码"`
 	Telephone string `gorm:"type:varchar(11);not null;unique" json:"telephone" validate:"required,min=6,max=120" label:"电话"`
 	Role      int    `gorm:"type:int;DEFAULT:2" json:"role" validate:"required,gte=0" label:"角色码"`
@@ -73,17 +73,17 @@ func EditUser(id int, data *User) int {
 	if err != nil {
 		return errmsg.ERROR
 	}
-	if len(user.Username)<4{
+	if len(user.Username)<3{
 		return errmsg.ERROR_USERNAME_WRONG
 	}
 	return errmsg.SUCCSE
 }
 
-// ChangePassword 修改密码
+// ChangePassword 修改密码   TODO 待完善
 func ChangePassword(id int, data *User) int {
 	//var user User
-	//var maps = make(map[string]interface{})
-	//maps["password"] = data.Password
+	var maps = make(map[string]interface{})
+	maps["password"] = data.Password
 
 	err = db.Select("password").Where("id = ?", id).Updates(&data).Error
 	if err != nil {

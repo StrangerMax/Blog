@@ -202,8 +202,8 @@ export default {
               if (this.userInfo.username == '') {
                 callback(new Error('请输入用户名'))
               }
-              if ([...this.userInfo.username].length < 4 || [...this.userInfo.username].length > 12) {
-                callback(new Error('用户名应当在4到12个字符之间'))
+              if ([...this.userInfo.username].length < 3 || [...this.userInfo.username].length > 12) {
+                callback(new Error('用户名应当在3到12个字符之间'))
               } else {
                 callback()
               }

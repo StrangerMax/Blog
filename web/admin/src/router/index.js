@@ -9,7 +9,7 @@ const AddArt = () => import(/* webpackChunkName: "AddArt" */ '../components/arti
 const ArtList = () => import(/* webpackChunkName: "ArtList" */ '../components/article/ArtList.vue')
 const CateList = () => import(/* webpackChunkName: "CateList" */ '../components/category/CateList.vue')
 const UserList = () => import(/* webpackChunkName: "UserList" */ '../components/user/UserList.vue')
-const Profile = () => import(/* webpackChunkName: "UserList" */ '../components/user/Profile.vue')
+//const Profile = () => import(/* webpackChunkName: "UserList" */ '../components/user/Profile.vue')
 const CommentList = () => import(/* webpackChunkName: "UserList" */ '../components/comment/commentList.vue')
 
 // 路由重复点击捕获错误

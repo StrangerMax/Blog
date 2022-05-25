@@ -40,3 +40,33 @@ func GetCate(pageSize int, pageNum int) ([]Category,int) {
 	}
 	return cate,total
 }
+
+// GetCateInfo 查询单个分类信息
+func GetCateInfo(id int) (Category,int) {
+	var cate Category
+	db.Where("id = ?",id).First(&cate)
+	return cate,errmsg.SUCCSE
+}
+
+// EditCate 编辑分类信息
+func EditCate(id int, data *Category) int {
+	var cate Category
+	var maps = make(map[string]interface{})
+	maps["name"] = data.Name
+
+	err = db.Model(&cate).Where("id = ? ", id).Updates(maps).Error
+	if err != nil {
+		return errmsg.ERROR
+	}
+	return errmsg.SUCCSE
+}
+
+// DeleteCate 删除分类
+func DeleteCate(id int) int {
+	var cate Category
+	err = db.Where("id = ? ", id).Delete(&cate).Error
+	if err != nil {
+		return errmsg.ERROR
+	}
+	return errmsg.SUCCSE
+}
