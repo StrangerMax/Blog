@@ -57,10 +57,10 @@ func Router() {
 		auth.PUT("article/:id", v1.EditArt)               // EditArt 编辑文章  TODO bug 无法修改
 		auth.DELETE("article/:id", v1.DeleteArt)          // DeleteArt 删除文章 TODO bug 不存在的删除没有正确提示
 		//// 上传文件
-		//auth.POST("upload", v1.UpLoad)
+		auth.POST("upload", v1.UpLoad)
 		//// 更新个人设置
-		//auth.GET("admin/profile/:id", v1.GetProfile)
-		//auth.PUT("profile/:id", v1.UpdateProfile)
+		auth.GET("admin/profile/:id", v1.GetProfile) // GetProfile 获取个人信息设置
+		auth.PUT("profile/:id", v1.UpdateProfile)    // UpdateProfile 更新个人信息设置
 		//// 评论模块
 		//auth.GET("comment/list", v1.GetCommentList)
 		//auth.DELETE("delcomment/:id", v1.DeleteComment)
@@ -92,7 +92,7 @@ func Router() {
 		router.POST("loginfront", v1.LoginFront)
 		//
 		//// 获取个人设置信息
-		//router.GET("profile/:id", v1.GetProfile)
+		router.GET("profile/:id", v1.GetProfile) // GetProfile 获取个人信息设置
 		//
 		//// 评论模块
 		//router.POST("addcomment", v1.AddComment)
