@@ -15,12 +15,11 @@ func createMyRender() multitemplate.Renderer {
 	return p
 }
 
-
-func Router()  {
+func Router() {
 	gin.SetMode("debug")
 	r := gin.New()
 	r.HTMLRender = createMyRender()
-	r.Use(middleware.CORSMiddleware(),middleware.RecoveryMiddleware(),middleware.Logger())
+	r.Use(middleware.CORSMiddleware(), middleware.RecoveryMiddleware(), middleware.Logger())
 
 	r.Static("/static", "./web/front/dist/static")
 	r.Static("/admin", "./web/admin/dist")
@@ -42,21 +41,21 @@ func Router()  {
 	{
 		// 用户模块的路由接口
 		auth.GET("admin/users", v1.GetUsers)
-		auth.PUT("user/:id", v1.EditUser)   		 //TODO bug存在 密码 手机号等修改  必须提供name role字段
-		auth.DELETE("user/:id", v1.DeleteUser)    // 软删除
+		auth.PUT("user/:id", v1.EditUser)      //TODO bug存在 密码 手机号等修改  必须提供name role字段
+		auth.DELETE("user/:id", v1.DeleteUser) // 软删除
 		////修改密码
-		auth.PUT("admin/changepw/:id", v1.ChangeUserPassword)   //TODO 存在bug  该方法需要对传入的数据进行加密解密
+		auth.PUT("admin/changepw/:id", v1.ChangeUserPassword) //TODO 存在bug  该方法需要对传入的数据进行加密解密
 		//// 分类模块的路由接口
 		auth.GET("admin/category", v1.GetCate)
 		auth.POST("category/add", v1.AddCate)
 		auth.PUT("category/:id", v1.EditCate)
 		auth.DELETE("category/:id", v1.DeleteCate)
 		//// 文章模块的路由接口
-		//auth.GET("admin/article/info/:id", v1.GetArtInfo)
-		//auth.GET("admin/article", v1.GetArt)
-		//auth.POST("article/add", v1.AddArticle)
-		//auth.PUT("article/:id", v1.EditArt)
-		//auth.DELETE("article/:id", v1.DeleteArt)
+		auth.GET("admin/article/info/:id", v1.GetArtInfo) // GetArtInfo 查询单个文章信息
+		auth.GET("admin/article", v1.GetArt)              // GetArt 查询文章列表   TODO bug 无法查询
+		auth.POST("article/add", v1.AddArticle)           // AddArticle 添加文章
+		auth.PUT("article/:id", v1.EditArt)               // EditArt 编辑文章  TODO bug 无法修改
+		auth.DELETE("article/:id", v1.DeleteArt)          // DeleteArt 删除文章 TODO bug 不存在的删除没有正确提示
 		//// 上传文件
 		//auth.POST("upload", v1.UpLoad)
 		//// 更新个人设置
@@ -75,18 +74,18 @@ func Router()  {
 	router := r.Group("api/v1")
 	{
 		// 用户信息模块
-		router.POST("user/add", v1.Register)     //TODO 账户创建对于软删除的手机号存在bug
-		router.GET("user/:id", v1.GetUserInfo)   //TODO 账户信息查询只提供name role 差手机号
-		router.GET("users", v1.GetUsers) 		//查询单个用户信息
+		router.POST("user/add", v1.Register)   //TODO 账户创建对于软删除的手机号存在bug
+		router.GET("user/:id", v1.GetUserInfo) //TODO 账户信息查询只提供name role 差手机号
+		router.GET("users", v1.GetUsers)       //查询单个用户信息
 		//
 		//// 文章分类信息模块
 		router.GET("category", v1.GetCate)
 		router.GET("category/:id", v1.GetCateInfo)
 		//
 		//// 文章模块
-		//router.GET("article", v1.GetArt)
-		//router.GET("article/list/:id", v1.GetCateArt)
-		//router.GET("article/info/:id", v1.GetArtInfo)
+		router.GET("article", v1.GetArt)              // GetArt 查询文章列表  TODO bug 无法查询
+		router.GET("article/list/:id", v1.GetCateArt) // GetCateArt 查询分类下的所有文章
+		router.GET("article/info/:id", v1.GetArtInfo) // GetArtInfo 查询单个文章信息
 		//
 		//// 登录控制模块
 		router.POST("login", v1.Login)
@@ -101,6 +100,6 @@ func Router()  {
 		//router.GET("commentfront/:id", v1.GetCommentListFront)
 		//router.GET("commentcount/:id", v1.GetCommentCount)
 	}
-	server :=viper.GetString("server.port")
-	r.Run(":"+server)
+	server := viper.GetString("server.port")
+	r.Run(":" + server)
 }
